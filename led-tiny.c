@@ -41,15 +41,17 @@ int main(void)
 				if(turndelay == 255)
 				{
 					if(OCR0A > 51) { //если нужно притухнуть
-						while(OCR0A > 51) {				
+						while((OCR0A > 51) & !(i & (1<<PB3))) {				
 							OCR0A--;
 							_delay_ms(8);
+							i = PINB;
 						}
 					}
-					if(OCR0A < 51) { //или чуть чуть разгореться
+					if((OCR0A < 51)&!(i & (1<<PB3))) { //или чуть чуть разгореться
 						while(OCR0A < 51) {				
 							OCR0A++;
 							_delay_ms(8);
+							i = PINB;
 						}
 					}
 				}
@@ -61,9 +63,10 @@ int main(void)
 			else { //разгорание при выключении поворотников
 				if(turndelay == 255) { // если досчитали или в начале
 					if(OCR0A!=255) { //если еще не разгорелось
-						while(OCR0A != 255) {				
+						while((OCR0A != 255)&!(i & (1<<PB3))) {				
 							OCR0A++;
 							_delay_ms(8);
+							i = PINB;
 						}
 					}
 				}
